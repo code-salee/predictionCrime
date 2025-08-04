@@ -3,6 +3,7 @@ package com.prediction_crime;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import jdk.javadoc.doclet.Doclet;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 //import springfox.documentation.builders.ApiInfoBuilder;
@@ -30,12 +31,20 @@ public class SwaggerConfiguration {
 //                        .version("1.0")
 //                        .build());
 //    }
-@Bean
-public OpenAPI customOpenAPI() {
-    return new OpenAPI()
-            .info(new Info()
-                    .title("Prediction de crime REST API")
-                    .version("1.0")
-                    .description("Documentation de l’API de prédiction de crime"));
-}
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Prediction de crime REST API")
+                        .version("1.0")
+                        .description("Documentation de l’API de prédiction de crime"));
+    }
+
+    @Bean
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("public")
+                .pathsToMatch("/**")
+                .build();
+    }
 }

@@ -1,19 +1,21 @@
 package com.prediction_crime.dto;
 
-import com.prediction_crime.models.enums.RoleList;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
-//@NoArgsConstructor
-//@AllArgsConstructor
 public class RoleDto implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false)
-    private RoleList libelle;
+    @NotNull(message = "Role cannot be null")
+    @NotBlank(message = "Le libellé ne peut pas être vide")
+    private String libelle;
 }

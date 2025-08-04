@@ -1,18 +1,22 @@
 package com.prediction_crime.services.impl;
 
 import com.prediction_crime.dto.RoleDto;
+import com.prediction_crime.exceptions.EntityNotFoundException;
+import com.prediction_crime.exceptions.GlobalExceptionHandler;
 import com.prediction_crime.models.Role;
+import com.prediction_crime.models.enums.RoleList;
 import com.prediction_crime.repositories.RoleRepository;
 import com.prediction_crime.services.RoleService;
+import com.prediction_crime.utils.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLDataException;
+
 
 @Service
 @Slf4j
@@ -29,33 +33,43 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<RoleDto> findAll(Pageable pageable) {
-        List<Role> roles = roleRepository.findAll(pageable).getContent();
-        Page<RoleDto> roleDtoPage = modelMapper.map(roles, Page.class);
-        return roleDtoPage;
+        Page<Role> rolePage = roleRepository.findAll(pageable);
+        return PageUtils.mapPage(rolePage, role -> modelMapper.map(role, RoleDto.class));
     }
 
     @Override
     public RoleDto save(RoleDto roleDto) {
-        return null;
+            roleDto.setLibelle(String.valueOf(RoleList.valueOf(roleDto.getLibelle())));
+            return modelMapper.map(roleRepository.save(modelMapper.map(roleDto, Role.class)), RoleDto.class);
     }
 
     @Override
     public RoleDto findById(Long id) {
-        return null;
+        return roleRepository.findById(id).map(role -> modelMapper.map(role, RoleDto.class)).orElse(null);
     }
 
     @Override
     public RoleDto findByLibelle(String libelle) {
-        return null;
+        Role role =  roleRepository.findByLibelle(RoleList.valueOf(libelle)).orElse(null);
+        return modelMapper.map(role, RoleDto.class);
     }
 
     @Override
     public RoleDto update(RoleDto roleDto, Long id) {
-        return null;
+        RoleDto oldRole = roleRepository.findById(id).map(role -> modelMapper.map(role, RoleDto.class)).orElse(null);
+        if (oldRole != null) {
+            oldRole.setLibelle(roleDto.getLibelle());
+            return modelMapper.map(roleRepository.save(modelMapper.map(oldRole, Role.class)), RoleDto.class);
+        } else {
+            throw  new EntityNotFoundException("Role not found");
+        }
     }
 
     @Override
     public void delete(Long id) {
-
+        if (id == null) {
+            throw  new EntityNotFoundException("Role not found");
+        }
+        roleRepository.deleteById(id);
     }
 }
