@@ -21,9 +21,28 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+# Activer DevTools
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: static/**,public/**
+      poll-interval: 1000
+      quiet-period: 400
+
+
+  jackson:
+    coercion:
+      empty-string: as_null
 logging:
   level:
-    org.springframework: DEBUG
+    org:
+#      springframework: DEBUG
+      springframework:
+        boot:
+          devtools: DEBUG
+
+
 management:
   endpoints:
     web:
