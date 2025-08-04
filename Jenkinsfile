@@ -22,8 +22,7 @@ pipeline {
         stage('Analyzing project') {
             steps {
                 echo ' -- Analyzing project -- '
-                bat 'mvn sonar:sonar -Dsonar.login=squ_80a9d90b556bf1107ab4d5b26cb73ffc4fbf9a79'
-            }
+                bat "mvn sonar:sonar -Dsonar.login=%SONAR_TOKEN%"            }
 	}
          stage('Build Image & Run Container') {
             steps {
