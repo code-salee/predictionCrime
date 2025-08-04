@@ -1,0 +1,29 @@
+server:
+  servlet:
+    context-path: /api
+  port: 8080
+spring:
+  profiles:
+    active: test
+  datasource:
+#    url: jdbc:mysql://localhost:5432/crime_prediction?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    url: jdbc:postgresql://localhost:5432/crime_prediction
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        naming:
+          strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+app:
+  db-init: false
