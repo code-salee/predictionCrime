@@ -3,15 +3,18 @@ package com.prediction_crime.controllers;
 import com.prediction_crime.dto.RoleDto;
 import com.prediction_crime.exceptions.EntityNotFoundException;
 import com.prediction_crime.services.RoleService;
+import org.apache.tomcat.util.http.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 
 @RestController
@@ -32,13 +35,14 @@ public class RoleController {
     }
 
     @PostMapping("")
-    RoleDto createRole(@Valid @RequestBody RoleDto roleDto){
+    ResponseEntity<RoleDto> createRole(@Valid @RequestBody RoleDto roleDto){
         log.info("Request to create role: {}", roleDto);
         try {
             if (roleDto.getLibelle() == null || roleDto.getLibelle().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Libelle cannot be empty");
             }
-            return roleService.save(roleDto);
+            RoleDto result = roleService.save(roleDto);
+            return ResponseEntity.created(new URI("/api/roles/" + result.getId())).body(result);
         } catch (Exception e) {
             log.error("Une erreur est survenue {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
