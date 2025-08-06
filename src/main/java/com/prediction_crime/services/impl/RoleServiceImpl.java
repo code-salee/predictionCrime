@@ -2,7 +2,6 @@ package com.prediction_crime.services.impl;
 
 import com.prediction_crime.dto.RoleDto;
 import com.prediction_crime.exceptions.EntityNotFoundException;
-import com.prediction_crime.exceptions.GlobalExceptionHandler;
 import com.prediction_crime.models.Role;
 import com.prediction_crime.models.enums.RoleList;
 import com.prediction_crime.repositories.RoleRepository;
@@ -12,10 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLDataException;
 
 
 @Service

@@ -1,11 +1,11 @@
 package com.prediction_crime.models;
 
 
-import com.prediction_crime.models.enums.RiskLevel;
 import com.prediction_crime.models.enums.RoleList;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -23,4 +23,7 @@ public class Role implements Serializable {
     @Column(unique = true, nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleList libelle;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 }
